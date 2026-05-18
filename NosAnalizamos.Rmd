@@ -17,6 +17,36 @@ pacman::p_load(
   tidyverse,
   GGally,
   knitr,
-  lubridate
+  lubridate,
+  readr,
+  dplyr,
+  stringr,
+  tidyr
 )
+```
+
+
+# Carga del fichero de datos
+
+Los datos comienzan en la fila 25 del fichero. Seleccionamos automáticamente sólo las filas que contienen datos, eliminando las filas completamente vacías en las columnas clave.
+
+```{r carga}
+
+# Fichero
+fichero <- "data/NosAutoanalizamos2022.tsv"
+
+datos <- read_tsv(fichero, skip = 25, show_col_types = FALSE)
+datos <- as.data.frame(datos)
+
+# Selección automática de filas con datos
+datos <- datos %>% filter(!is.na(Id) & Id != "")
+
+cat("Alumnos cargados:", nrow(datos), "\n")
+cat("Dimensiones del data frame:", nrow(datos), "filas x", ncol(datos), "columnas\n")
+```
+# Eliminamos del usuario martsobm
+
+```{r eliminar_martsobm}
+datos <- datos %>% filter(Id != "martsobm")
+cat("Número de alumnos tras eliminar a martsobm:", nrow(datos), "\n")
 ```
