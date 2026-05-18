@@ -136,6 +136,8 @@ cat("\nCorrelación de Spearman\n"); print(round(cor_spearman, 3))
 cat("\nCovarianza\n");             print(round(covarianza,   3))
 ```
 
+Determinamos qué pares tienen la correlación más alta:
+
 ```{r max_correlacion}
 # Ponemos las diagonales a NA
 diag(cor_pearson)  <- NA
@@ -150,3 +152,20 @@ cat("Pearson  — par con correlación más alta:", rownames(cor_pearson)[idx_p[
 cat("Spearman — par con correlación más alta:", rownames(cor_spearman)[idx_s[1]],
     "—", colnames(cor_spearman)[idx_s[2]], "=", round(max(cor_spearman, na.rm=TRUE), 3), "\n")
 ```
+
+# Boxplots de calificaciones
+
+```{r boxplot_notas, fig.width = 8, fig.height = 5}
+datos %>%
+  select(all_of(notas)) %>%
+  pivot_longer(everything(), names_to = "Asignatura", values_to = "Nota") %>%
+  ggplot(aes(x = Asignatura, y = Nota, fill = Asignatura)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(title = "Distribución de calificaciones por asignatura",
+       x = "Asignatura", y = "Calificación") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Las asignagturas de ANM y DCS son las que tienen mejores resultados y menos dispersión, con medianas en torno a 7.5-8. ALG y MD tienen una dispersión similar y medianas algo más bajas. FP es la más heterogénea, con la caja más grande y la mediana más baja, lo que refleja que hay alumnos con notas muy altas pero también muchos con el valor imputado de NC -> 3. Los puntos aislados por debajo corresponden a outliers, especialmente visibles en ALG y MD.
+
