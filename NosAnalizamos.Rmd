@@ -118,3 +118,35 @@ ggpairs(datos %>% select(all_of(notas)),
 Las correlaciones entre asignaturas son todas **positivas y significativas**, lo que indica que en general los estudiantes que obtienen buenas notas en una asignatura tienden a obtenerlas también en las demás. La correlación más alta se da entre ALG y ANM (0.750), lo cual tiene sentido dado que ambas son asignaturas de matemáticas. También destaca la relación entre FP y MD (0.722), que comparten una base de razonamiento lógico.
 En las distribuciones de la diagonal se puede ver que ALG y FP tienen dos picos: uno alrededor de 3, que viene de los NC imputados, y otro en notas más altas. Las demás asignaturas tienen una distribución más normal, lo que indica que habían menos NC en ellas.
 
+# Matrices de correlación y covarianza (Spearman y Pearson)
+
+Calculamos las matrices con **Pearson** y **Spearman** e identificamos el par con la correlación más alta, excluyendo la diagonal (que siempre vale 1).
+
+```{r correlaciones}
+# Sólo alumnos con nota en todas las asignaturas
+datos_completos <- datos %>% drop_na(all_of(notas))
+cat("Alumnos con todas las notas:", nrow(datos_completos), "\n\n")
+
+cor_pearson <- cor(datos_completos[, notas], method = "pearson")
+cor_spearman <- cor(datos_completos[, notas], method = "spearman")
+covarianza <- cov(datos_completos[, notas])
+
+cat("Correlación de Pearson\n");   print(round(cor_pearson,  3))
+cat("\nCorrelación de Spearman\n"); print(round(cor_spearman, 3))
+cat("\nCovarianza\n");             print(round(covarianza,   3))
+```
+
+```{r max_correlacion}
+# Ponemos las diagonales a NA
+diag(cor_pearson)  <- NA
+diag(cor_spearman) <- NA
+
+idx_p <- which(cor_pearson  == max(cor_pearson,  na.rm = TRUE), arr.ind = TRUE)[1, ]
+idx_s <- which(cor_spearman == max(cor_spearman, na.rm = TRUE), arr.ind = TRUE)[1, ]
+
+cat("Pearson  — par con correlación más alta:", rownames(cor_pearson)[idx_p[1]],
+    "—", colnames(cor_pearson)[idx_p[2]], "=", round(max(cor_pearson, na.rm=TRUE), 3), "\n")
+
+cat("Spearman — par con correlación más alta:", rownames(cor_spearman)[idx_s[1]],
+    "—", colnames(cor_spearman)[idx_s[2]], "=", round(max(cor_spearman, na.rm=TRUE), 3), "\n")
+```
