@@ -106,3 +106,15 @@ tabla_est <- datos %>%
 kable(tabla_est, caption = "Estadísticos de las calificaciones")
 ```
 
+# Representación relaciones entre variables con ggpairs
+
+```{r ggpairs, fig.width = 9, fig.height = 8}
+ggpairs(datos %>% select(all_of(notas)),
+        title = "Relaciones entre variables",
+        upper = list(continuous = wrap("cor", size = 3)),
+        lower = list(continuous = wrap("points", alpha = 0.5, size = 0.8)),
+        diag = list(continuous = wrap("densityDiag")))
+```
+Las correlaciones entre asignaturas son todas **positivas y significativas**, lo que indica que en general los estudiantes que obtienen buenas notas en una asignatura tienden a obtenerlas también en las demás. La correlación más alta se da entre ALG y ANM (0.750), lo cual tiene sentido dado que ambas son asignaturas de matemáticas. También destaca la relación entre FP y MD (0.722), que comparten una base de razonamiento lógico.
+En las distribuciones de la diagonal se puede ver que ALG y FP tienen dos picos: uno alrededor de 3, que viene de los NC imputados, y otro en notas más altas. Las demás asignaturas tienen una distribución más normal, lo que indica que habían menos NC en ellas.
+
