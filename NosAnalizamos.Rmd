@@ -169,3 +169,17 @@ datos %>%
 
 Las asignagturas de ANM y DCS son las que tienen mejores resultados y menos dispersión, con medianas en torno a 7.5-8. ALG y MD tienen una dispersión similar y medianas algo más bajas. FP es la más heterogénea, con la caja más grande y la mediana más baja, lo que refleja que hay alumnos con notas muy altas pero también muchos con el valor imputado de NC -> 3. Los puntos aislados por debajo corresponden a outliers, especialmente visibles en ALG y MD.
 
+# Boxplots por asignatura según sexo
+
+```{r boxplot_sexo, fig.width = 8, fig.height = 5}
+datos %>%
+  select(Sex, all_of(notas)) %>%
+  pivot_longer(cols = -Sex, names_to = "Asignatura", values_to = "Nota") %>%
+  ggplot(aes(x = Asignatura, y = Nota, fill = Sex)) +
+  geom_boxplot(alpha = 0.7, position = position_dodge(0.8)) +
+  labs(title = "Calificaciones por asignatura y sexo",
+       x = "Asignatura", y = "Calificación", fill = "Sexo") +
+  theme_minimal()
+```
+
+Observanddo el boxplot notámos que, en general, los hombres obtienen notas superiores en casi todas las asignaturas, aunque las diferencias no son muy grandes. La excepción más llamativa es FP, donde la diferencia es bastante notable: las mujeres tienen una mediana en torno a 3 mientras que los hombres se sitúan alrededor de 6, lo que nos sugiere que hay muchas más mujeres con NC en esa asignatura.
