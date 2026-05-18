@@ -91,7 +91,7 @@ Para cada asignatura: valor mínimo, percentil 25, mediana, valor medio, desviac
 tabla_est <- datos %>%
   summarise(across(all_of(notas), list(
     Min = ~ round(min(.x, na.rm = TRUE), 2),
-    P25 = ~ round(quantile(.x, 0.25,    na.rm = TRUE), 2),
+    P25 = ~ round(quantile(.x, 0.25, na.rm = TRUE), 2),
     Mediana = ~ round(median(.x, na.rm = TRUE), 2),
     Media = ~ round(mean(.x, na.rm = TRUE), 2),
     Desviación_tipica = ~ round(sd(.x, na.rm = TRUE), 2),
@@ -131,9 +131,9 @@ cor_pearson <- cor(datos_completos[, notas], method = "pearson")
 cor_spearman <- cor(datos_completos[, notas], method = "spearman")
 covarianza <- cov(datos_completos[, notas])
 
-cat("Correlación de Pearson\n");   print(round(cor_pearson,  3))
+cat("Correlación de Pearson\n"); print(round(cor_pearson,  3))
 cat("\nCorrelación de Spearman\n"); print(round(cor_spearman, 3))
-cat("\nCovarianza\n");             print(round(covarianza,   3))
+cat("\nCovarianza\n"); print(round(covarianza,   3))
 ```
 
 Determinamos qué pares tienen la correlación más alta:
@@ -167,7 +167,7 @@ datos %>%
   theme(legend.position = "none")
 ```
 
-Las asignagturas de ANM y DCS son las que tienen mejores resultados y menos dispersión, con medianas en torno a 7.5-8. ALG y MD tienen una dispersión similar y medianas algo más bajas. FP es la más heterogénea, con la caja más grande y la mediana más baja, lo que refleja que hay alumnos con notas muy altas pero también muchos con el valor imputado de NC -> 3. Los puntos aislados por debajo corresponden a outliers, especialmente visibles en ALG y MD.
+Las asignaturas de ANM y DCS son las que tienen mejores resultados y menos dispersión, con medianas en torno a 7.5-8. ALG y MD tienen una dispersión similar y medianas algo más bajas. FP es la más heterogénea, con la caja más grande y la mediana más baja, lo que refleja que hay alumnos con notas muy altas pero también muchos con el valor imputado de NC -> 3. Los puntos aislados por debajo corresponden a outliers, especialmente visibles en ALG y MD.
 
 # Boxplots por asignatura según sexo
 
@@ -202,3 +202,5 @@ datos_completos %>%
 ```
 
 Como podemos observar, ANM y DCS tienden a ser las notas más altas para la mayoría, mientras que FP es la más irregular, con varios alumnos en el valor mínimo de 3. Destacan jamarlili, que tiene las notas más altas en casi todas las asignaturas, y joenman, que tiene la nota más baja de ALG (por debajo de 2.5) pero sube en el resto.
+
+
