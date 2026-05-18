@@ -182,4 +182,23 @@ datos %>%
   theme_minimal()
 ```
 
-Observanddo el boxplot notámos que, en general, los hombres obtienen notas superiores en casi todas las asignaturas, aunque las diferencias no son muy grandes. La excepción más llamativa es FP, donde la diferencia es bastante notable: las mujeres tienen una mediana en torno a 3 mientras que los hombres se sitúan alrededor de 6, lo que nos sugiere que hay muchas más mujeres con NC en esa asignatura.
+Observando el boxplot notámos que, en general, los hombres obtienen notas superiores en casi todas las asignaturas, aunque las diferencias no son muy grandes. La excepción más llamativa es FP, donde la diferencia es bastante notable: las mujeres tienen una mediana en torno a 3 mientras que los hombres se sitúan alrededor de 6, lo que nos sugiere que hay muchas más mujeres con NC en esa asignatura.
+
+# Diagrama de líneas con alumnos con todas las calificaciones
+
+Seleccionamos los alumnos con nota en **todas** las asignaturas y representamos sus calificaciones con un diagrama de líneas (una línea por asignatura) y un punto por cada alumno - asignatura.
+
+```{r grafico_lineas, fig.width = 10, fig.height = 5}
+datos_completos %>%
+  select(Id, all_of(notas)) %>%
+  pivot_longer(cols = -Id, names_to = "Asignatura", values_to = "Nota") %>%
+  ggplot(aes(x = Id, y = Nota, colour = Asignatura, group = Asignatura)) +
+  geom_line() +
+  geom_point(size = 2) +
+  labs(title = "Calificaciones de alumnos con todas las notas",
+       x = "Alumno", y = "Calificación", colour = "Asignatura") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+```
+
+Como podemos observar, ANM y DCS tienden a ser las notas más altas para la mayoría, mientras que FP es la más irregular, con varios alumnos en el valor mínimo de 3. Destacan jamarlili, que tiene las notas más altas en casi todas las asignaturas, y joenman, que tiene la nota más baja de ALG (por debajo de 2.5) pero sube en el resto.
