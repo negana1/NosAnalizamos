@@ -391,3 +391,13 @@ cat("Outliers detectados:", sum(outliers_height, na.rm = TRUE), "\n")
 ```
 
 El identificador de Hampel **no detecta ningún outlier** en la variable `Height`.
+
+## 8. Asignatura FP: imputación generalizada usando la media
+
+```{r fp_media}
+media_fp <- mean(datos26$FP, na.rm = TRUE)
+cat("Media de FP para la imputación:", round(media_fp, 4), "\n")
+
+# datos26$FP[is.na(datos26$FP)] <- mean(datos26$FP, na.rm = TRUE) si quisieramos hacerla
+```
+Para una imputación generalizada usando la media, el valor a utilizar sería **`r round(media_fp, 4)`**.
