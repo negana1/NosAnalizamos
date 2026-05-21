@@ -374,3 +374,20 @@ ggplot(datos26, aes(x = Height, y = `Wr.Hnd`)) +
 
 Sí existe relación lineal entre la altura y el tamaño de la mano (p < 0.001), aunque el $R^2$ indica que la altura solo explica un 17% de la variabilidad de `Wr.Hnd`.
 Se ve claramente en el gráfico: la tendencia es positiva pero los puntos están muy dispersos.
+
+
+## 7. Detección de outliers mediante identificador Hampel en `Height`
+
+```{r hampel}
+madm <- function(x, na.rm = TRUE) {
+  1.4826 * median(abs(x - median(x, na.rm = na.rm)), na.rm = na.rm)
+}
+reglahampel <- function(x, na.rm = TRUE) {
+  abs(x - median(x, na.rm = na.rm)) > 3 * madm(x, na.rm = na.rm)
+}
+
+outliers_height <- reglahampel(datos26$Height)
+cat("Outliers detectados:", sum(outliers_height, na.rm = TRUE), "\n")
+```
+
+El identificador de Hampel **no detecta ningún outlier** en la variable `Height`.
