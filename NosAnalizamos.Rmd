@@ -328,4 +328,35 @@ datos26 %>%
 Los hombres tienen una media de `Wr.Hnd` mayor que las mujeres (19.99 vs 18.04), lo cual es esperable dado que, en general, los hombres tienen manos más grandes.
 Además, la varianza es mayor en mujeres (3.72 vs 1.73), lo que indica que hay más dispersión en el tamaño de mano entre las alumnas que entre los alumnos.
 
+## 5. Existe relación entre el sexo y la mano con la que se escribe?
+
+```{r}
+unique(datos26$NW.Hnd)
+```
+
+Dado que `NW.Hnd` tiene variantes en minúsculas, corregimos el formato.
+
+Además, dado que queremos la relación entre dos variables categóricas (`Sex` y `NW.Hnd`),
+aplicamos el test chi-cuadrado:
+
+- **H0**: el sexo y la mano con la que se escribe son independientes (no hay relación)
+- **H1**: existe relación entre ambas variables
+
+Si el p-valor es mayor que 0.05 no rechazamos H0.
+
+```{r chi2_nwhnd}
+datos26 <- datos26 %>%
+  mutate(NW.Hnd = str_to_title(trimws(NW.Hnd)),
+         NW.Hnd = case_when(NW.Hnd %in% c("Derecha", "Izquierda") ~ NW.Hnd,
+                            TRUE ~ NA_character_))
+
+tabla_mano <- table(datos26$Sex, datos26$NW.Hnd)
+print(tabla_mano)
+chisq.test(tabla_mano) # Tests Chi-cuadrado
+```
+
+El p-valor obtenido es 0.4169 > 0.05, por lo que no podemos rechazar H0 y concluimos que **no hay relación** entre el sexo y la mano con la que se escribe.
+
+Si miramos la tabla, tanto hombres como mujeres escriben mayoritariamente con la derecha, y la proporción de zurdos es similar en ambos sexos.
+
 
