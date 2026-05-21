@@ -248,3 +248,28 @@ Las **principales diferencias** observadas respecto a 2022 son:
 - El fichero de 2026 tiene dos columnas extra (`DNI`) y **60 alumnos** frente a los 62 de 2022.
 - Las notas de ALG, ANM, FPy DCS son más bajas en 2026, mientras que MD se mantiene igual.
 - En 2022 hay más alumnos con todas las notas (**20 vs 14** en 2026).
+
+# Preguntas datos curso 2026
+
+## 1. Edad alumno más joven a día 01/02/2026
+
+Notamos que las fechas tienen formatos inconsistentes: algunas usan barras (`13/09/2006`), otras un solo dígito en día o mes (`31-7-2007`).
+
+```{r mas-joven}
+fecha_refe <- as.Date("2026-02-01")
+
+# Arreglamos llas fechas con lubridate::parse_date_time
+datos26 <- datos26 %>%
+  mutate(
+    FechaNac_parsed = parse_date_time(`FechaNac(DD-MM-YYY)`,
+                                      orders = "dmy", quiet = TRUE) %>% 
+      as.Date(),
+    Edad = as.numeric(fecha_refe - FechaNac_parsed) / 365
+  )
+
+mas_joven <- datos26 %>% slice_min(Edad, n = 1)
+cat("Alumno más joven:", mas_joven$Id, "\n")
+cat("Fecha de nacimiento:", as.character(mas_joven$FechaNac_parsed), "\n")
+cat("Edad a 01/02/2026:", round((mas_joven$Edad), 2), "años.\n")
+```
+
