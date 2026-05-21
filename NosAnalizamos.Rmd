@@ -253,6 +253,10 @@ Las **principales diferencias** observadas respecto a 2022 son:
 
 ## 1. Edad alumno más joven a día 01/02/2026
 
+```{r}
+unique(datos26$`FechaNac(DD-MM-YYY)`)
+```
+
 Notamos que las fechas tienen formatos inconsistentes: algunas usan barras (`13/09/2006`), otras un solo dígito en día o mes (`31-7-2007`).
 
 ```{r mas-joven}
@@ -277,11 +281,15 @@ cat("Edad a 01/02/2026:", round((mas_joven$Edad), 2), "años.\n")
 ```{r trabajadores}
 datos26 <- datos26 %>% mutate(Hwork = as.numeric(Hwork))
 n_trabajan <- sum(datos26$Hwork > 0, na.rm = TRUE)
-cat("Alumnos que estudian y trabajan:", n_trabajan, ".\n")
+cat("Alumnos que estudian y trabajan:", n_trabajan, "\n")
 ```
 ## 3. Hay más hombres o más mujeres fumadoras?
 
-Observamos que los valores válidos son "Si" y "No", pero tenemos entradas con "SI", "si, "NO" y "no".
+```{r}
+unique(datos26$Smoke)
+```
+
+Observamos que los valores válidos son "Si" y "No", pero tenemos entradas con "NO" y "no".
 
 ```{r fumadores}
 # Corregimos los datos
@@ -297,3 +305,10 @@ datos26 %>%
 
 Los `r nrow(datos26 %>% filter(Smoke == "Si"))` alumnos fumadores son todos **hombres**. No hay ninguna mujer fumadora en este grupo.
 
+## 4. Valor medio y varianza de `Wr.Hnd` según sexo
+
+```{r}
+unique(datos26$Wr.Hnd)
+```
+
+Como vamos a trabajar con la función `as.numeric` debemos remplazar las comas decimales a puntos.
