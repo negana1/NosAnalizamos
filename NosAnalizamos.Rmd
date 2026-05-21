@@ -359,4 +359,18 @@ El p-valor obtenido es 0.4169 > 0.05, por lo que no podemos rechazar H0 y conclu
 
 Si miramos la tabla, tanto hombres como mujeres escriben mayoritariamente con la derecha, y la proporción de zurdos es similar en ambos sexos.
 
+## 6. Existe relación lineal entre la altura y la distacia del extremo del meñique al pulgar de la mano con la que escribimos? (Relación lineal entre Height y Wr.Hnd)
 
+```{r height_wrhnd, fig.width=6, fig.height=4}
+modelo_hw <- lm(`Wr.Hnd` ~ Height, data = datos26)
+summary(modelo_hw)
+
+ggplot(datos26, aes(x = Height, y = `Wr.Hnd`)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, colour = "steelblue") +
+  labs(title = "Altura vs Wr.Hnd", x = "Altura (cm)", y = "Wr.Hnd (cm)") +
+  theme_minimal()
+```
+
+Sí existe relación lineal entre la altura y el tamaño de la mano (p < 0.001), aunque el $R^2$ indica que la altura solo explica un 17% de la variabilidad de `Wr.Hnd`.
+Se ve claramente en el gráfico: la tendencia es positiva pero los puntos están muy dispersos.
