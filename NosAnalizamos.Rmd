@@ -312,3 +312,20 @@ unique(datos26$Wr.Hnd)
 ```
 
 Como vamos a trabajar con la función `as.numeric` debemos remplazar las comas decimales a puntos.
+
+```{r wrhnd_sexo}
+datos26 <- datos26 %>%
+  mutate(`Wr.Hnd` = as.numeric(str_replace_all(`Wr.Hnd`, ",", ".")))
+
+datos26 %>%
+  group_by(Sex) %>%
+  summarise(Media = round(mean(`Wr.Hnd`, na.rm = TRUE), 4),
+            Varianza = round(var(`Wr.Hnd`,  na.rm = TRUE), 4),
+            .groups = "drop") %>%
+  kable(caption = "Media y varianza de Wr.Hnd por sexo")
+```
+
+Los hombres tienen una media de `Wr.Hnd` mayor que las mujeres (19.99 vs 18.04), lo cual es esperable dado que, en general, los hombres tienen manos más grandes.
+Además, la varianza es mayor en mujeres (3.72 vs 1.73), lo que indica que hay más dispersión en el tamaño de mano entre las alumnas que entre los alumnos.
+
+
