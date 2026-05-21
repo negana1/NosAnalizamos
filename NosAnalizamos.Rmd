@@ -272,4 +272,11 @@ cat("Alumno más joven:", mas_joven$Id, "\n")
 cat("Fecha de nacimiento:", as.character(mas_joven$FechaNac_parsed), "\n")
 cat("Edad a 01/02/2026:", round((mas_joven$Edad), 2), "años.\n")
 ```
+## 2.Cuántos alumnos estudian y trabajan?
+
+```{r trabajadores}
+datos26 <- datos26 %>% mutate(Hwork = as.numeric(Hwork))
+n_trabajan <- sum(datos26$Hwork > 0, na.rm = TRUE)
+cat("Alumnos que estudian y trabajan:", n_trabajan, ".\n")
+```
 
