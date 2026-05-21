@@ -204,3 +204,47 @@ datos_completos %>%
 Como podemos observar, ANM y DCS tienden a ser las notas más altas para la mayoría, mientras que FP es la más irregular, con varios alumnos en el valor mínimo de 3. Destacan jamarlili, que tiene las notas más altas en casi todas las asignaturas, y joenman, que tiene la nota más baja de ALG (por debajo de 2.5) pero sube en el resto.
 
 
+# Comparación 2022 vs 2026
+
+Para usar el fichero de 2026 cambiamos el nombre del cihero y skip a 28:
+
+El resto del código es exactamente el mismo.
+
+```{r datos26-comparacion}
+# Cargamos 2026 con el mismo proceso
+datos26 <- read_tsv("data/NosAutoanalizamos2026.tsv",
+                         skip = 28, show_col_types = FALSE) %>%
+  as.data.frame() %>%
+  filter(!is.na(Id) & Id != "", Id != "martsobm") %>%
+  mutate(across(all_of(notas), ~ {
+    x <- str_replace_all(as.character(.x), ",", ".")
+    x[x == "NC"] <- "3"
+    x[x == "NP"] <- NA
+    round(suppressWarnings(as.numeric(x)), 2)
+  }))
+
+# Número de alumnos
+cat("Alumnos 2022:", nrow(datos), "\n")
+cat("Alumnos 2026:", nrow(datos26), "\n\n")
+
+# Alumnos con todas las notas
+cat("Alumnos con todas las notas 2022:", nrow(datos %>% drop_na(all_of(notas))), "\n")
+cat("Alumnos con todas las notas 2026:", nrow(datos26 %>% drop_na(all_of(notas))), "\n\n")
+
+# Medias de cada asignatura en ambos cursos
+bind_rows(
+  datos %>% summarise(across(all_of(notas), ~ round(mean(.x, na.rm=TRUE), 2))) %>% mutate(Curso = "2022"),
+  datos26 %>% summarise(across(all_of(notas), ~ round(mean(.x, na.rm=TRUE), 2))) %>% mutate(Curso = "2026")
+) %>% select(Curso, everything()) %>% kable(caption = "Medias por asignatura y curso")
+
+# Columnas extra en 2026
+cat("Columnas en 2022:", ncol(datos), "\n")
+cat("Columnas en 2026:", ncol(datos26), "\n")
+cat("Columna extra en 2026:", setdiff(names(datos26), names(datos)), "\n")
+```
+
+Las **principales diferencias** observadas respecto a 2022 son: 
+
+- El fichero de 2026 tiene dos columnas extra (`DNI`) y **60 alumnos** frente a los 62 de 2022.
+- Las notas de ALG, ANM, FPy DCS son más bajas en 2026, mientras que MD se mantiene igual.
+- En 2022 hay más alumnos con todas las notas (**20 vs 14** en 2026).
