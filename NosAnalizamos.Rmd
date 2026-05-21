@@ -401,3 +401,26 @@ cat("Media de FP para la imputación:", round(media_fp, 4), "\n")
 # datos26$FP[is.na(datos26$FP)] <- mean(datos26$FP, na.rm = TRUE) si quisieramos hacerla
 ```
 Para una imputación generalizada usando la media, el valor a utilizar sería **`r round(media_fp, 4)`**.
+
+## 9. Nueva variable PulseCat e imputación de FP por casos similares
+
+Nueva variable PulseCat con dos valores PulseH, si Pulse>=65 y PulseL si Pulse<65.
+¿Qué valores utilizarías para imputar los valores faltantes de las notas de FP, dependiendo del valor de PulseCat (imputación por casos similares)
+
+
+```{r pulseCat}
+datos26 <- datos26 %>%
+  mutate(Pulse = as.numeric(Pulse),
+         PulseCat = case_when(
+           Pulse >= 65 ~ "PulseH",
+           Pulse <  65 ~ "PulseL",
+           TRUE ~ NA_character_
+         ))
+
+datos26 %>%
+  group_by(PulseCat) %>%
+  summarise(Media_FP = round(mean(FP, na.rm = TRUE), 4), .groups = "drop") %>%
+  kable(caption = "Media de FP según PulseCat")
+```
+
+Para la imputación por casos similares utilizaríamos la media de FP de cada grupo: **PulseH** -> 5.10, **PulseL** -> 4.14.
