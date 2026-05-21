@@ -424,3 +424,20 @@ datos26 %>%
 ```
 
 Para la imputación por casos similares utilizaríamos la media de FP de cada grupo: **PulseH** -> 5.10, **PulseL** -> 4.14.
+
+## 10. Interpretación: "El ritmo cardíaco está ligado con la cantidad de sangre que llega al cerebro, por tanto existirá una relación lineal directa esta esta variable y las calificaciones obtenidas en ALG"
+
+Nos planteamos si existe relación entre `Pulse` y `ALG`.
+
+```{r pulse_alg, fig.width=6, fig.height=4}
+modelo_pa <- lm(ALG ~ Pulse, data = datos26)
+summary(modelo_pa)
+
+ggplot(datos26, aes(x = Pulse, y = ALG)) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE, colour = "hotpink1") +
+  labs(title = "Ritmo cardíaco vs ALG", x = "Pulse (ppm)", y = "ALG") +
+  theme_minimal()
+```
+
+Los datos no respaldan esa afirmación. El p-valor del coeficiente de `Pulse` es `r round(summary(modelo_pa)$coefficients["Pulse","Pr(>|t|)"], 4)`, muy por encima de 0.05, y el $R^2$ es prácticamente cero, así que el ritmo cardíaco no explica nada de la variabilidad en ALG. Además, aunque hubiera correlación, eso no implicaría causalidad: las notas dependen de otros factores.
